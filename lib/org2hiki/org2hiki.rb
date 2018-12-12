@@ -9,15 +9,15 @@ class To_Hiki
       if m = line.match(/^\#\+(.+)/)
         if m[1]=="begin_example" 
           @in_example = true
-          @outputs << "<<<\n"
+          @outputs << "<<<"
           next
         elsif m[1]=="begin_src ruby"
           @in_example = true
-          @outputs << "<<< ruby\n"
+          @outputs << "<<< ruby"
           next
         elsif m[1]=="end_src" or m[1]=="end_example"
           @in_example = false
-          @outputs << ">>>\n"
+          @outputs << ">>>"
           next
         else
           @outputs <<  "// "+line
@@ -36,5 +36,7 @@ class To_Hiki
 
       @outputs << line
     end
+    @outputs.join("\n")
   end
+  
 end

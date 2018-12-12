@@ -1,0 +1,95 @@
+#+OPTIONS: ^:{}
+#+STARTUP: indent nolineimages
+#+TITLE: hogehoge
+#+AUTHOR: name
+#+EMAIL:     (concat "nishitani@kwansei.ac.jp")
+#+LANGUAGE:  jp
+#+OPTIONS:   H:4 toc:t num:2
+
+#+SETUPFILE: /Users/bob/org-html-themes/setup/theme-readtheorg.setup
+
+Ruby で数値計算をするのは環境構築がしんどそう．
+numo/narrayがいい感じになっているので，linalgを入れようとしたんですが．．．
+ううん，エラーが再現できない．学生さんに試してもらおう．
+
+* macへのinstall
+** blas, lapackのinstall
+
+#+begin_example
+> brew install lapack
+==> Downloading https://homebrew.bintray.com/bottles/lapack-3.8.0_1.high_sierra.bottle.tar.gz
+######################################################################## 100.0%
+==> Pouring lapack-3.8.0_1.high_sierra.bottle.tar.gz
+==> Caveats
+lapack is keg-only, which means it was not symlinked into /usr/local,
+because macOS already provides this software and installing another version in
+parallel can cause all kinds of trouble.
+
+For compilers to find lapack you may need to set:
+  set -gx LDFLAGS "-L/usr/local/opt/lapack/lib"
+  set -gx CPPFLAGS "-I/usr/local/opt/lapack/include"
+
+For pkg-config to find lapack you may need to set:
+  set -gx PKG_CONFIG_PATH "/usr/local/opt/lapack/lib/pkgconfig"
+
+==> Summary
+🍺  /usr/local/Cellar/lapack/3.8.0_1: 28 files, 10MB
+
+
+> brew install openblas
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 3 taps (homebrew/core, homebrew/cask and homebrew/cask-fonts).
+==> Renamed Formulae
+hh -> hstr
+==> Deleted Formulae
+apple-gcc42                   aptly-completion              php@7.0                       pldebugger
+
+==> Downloading https://homebrew.bintray.com/bottles/openblas-0.3.4.high_sierra.bottle.tar.gz
+######################################################################## 100.0%
+==> Pouring openblas-0.3.4.high_sierra.bottle.tar.gz
+==> Caveats
+openblas is keg-only, which means it was not symlinked into /usr/local,
+because macOS provides BLAS and LAPACK in the Accelerate framework.
+
+For compilers to find openblas you may need to set:
+  set -gx LDFLAGS "-L/usr/local/opt/openblas/lib"
+  set -gx CPPFLAGS "-I/usr/local/opt/openblas/include"
+
+For pkg-config to find openblas you may need to set:
+  set -gx PKG_CONFIG_PATH "/usr/local/opt/openblas/lib/pkgconfig"
+
+==> Summary
+🍺  /usr/local/Cellar/openblas/0.3.4: 21 files, 117.8MB
+
+#+end_example
+多分pathのsetはnumo-linalgには効かない．
+
+** numo-linalgのinstall
+gem installするときにpathを指定する必要がある．
+#+begin_example
+> gem uninstall numo-linalg
+> gem install numo-linalg -- --with-openblas-dir=/usr/local/opt/openblas
+#+end_example
+
+[[https://gist.github.com/sonots/6fadc6cbbb170b9c4a0c9396c91a88e1]]
+
+** ruby sample
+最初の一歩．順番が大事みたい．
+
+#+begin_src ruby
+require 'numo/narray'
+require "numo/linalg/use/openblas"
+require 'numo/linalg'
+
+p Numo::Linalg::Loader.libs
+
+m = 10
+a = Numo::SFloat.new(m).rand
+b = Numo::SFloat.new(m).rand
+p a*b
+
+
+p ma = Numo::NArray[[1, 2, 3 ], [3, 4, 5], [6,7,8]]
+p Numo::Linalg.eig(ma)
+#+end_src
