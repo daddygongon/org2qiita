@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "org2hiki"
+
+Org2hiki::CLI.start(ARGV)
