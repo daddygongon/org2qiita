@@ -1,28 +1,28 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
 
-class To_Hiki
+# convert org formated lines to hiki
+class ToHiki
+  # converter
   def convert(lines)
     @in_example = false
     @outputs = []
 
     lines.split(/\n/).each do |line|
-      if m = line.match(/^\#\+(.+)/)
-        if m[1]=="begin_example" 
+      m = line.match(/^\#\+(.+)$/)
+      if m
+        if m[1] == 'begin_example'
           @in_example = true
-          @outputs << "<<<"
-          next
-        elsif m[1]=="begin_src ruby"
+          @outputs << '<<<'
+        elsif m[1] == 'begin_src ruby'
           @in_example = true
-          @outputs << "<<< ruby"
-          next
-        elsif m[1].include?(["end_src","end_example"])
+          @outputs << '<<< ruby'
+        elsif (m[1] == 'end_src') || (m[1] == 'end_example')
           @in_example = false
-          @outputs << ">>>"
-          next
+          @outputs << '>>>'
         else
-          @outputs <<  "// "+line
-          next
+          @outputs << '// ' + line
         end
+        next
       end
 
       if @in_example == true
@@ -30,13 +30,12 @@ class To_Hiki
         next
       end
 
-      line.gsub!(/^\* /,'! ')
-      line.gsub!(/^\*\* /,'!! ')
-      line.gsub!(/^\*\*\* /,'!!! ')
+      line.gsub!(/^\* /, '! ')
+      line.gsub!(/^\*\* /, '!! ')
+      line.gsub!(/^\*\*\* /, '!!! ')
 
       @outputs << line
     end
     @outputs.join("\n")
   end
-  
 end

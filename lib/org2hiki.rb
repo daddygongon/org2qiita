@@ -19,7 +19,7 @@ module Org2hiki
     desc 'convert', 'convert FILE.org to FILE.hiki'
     def convert(*args)
       puts "{{toc}}\n\n"
-      print To_Hiki.new.convert(File.read(args[0]))
+      print ToHiki.new.convert(File.read(args[0]))
     end
 
 
