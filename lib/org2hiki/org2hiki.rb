@@ -15,7 +15,7 @@ class To_Hiki
           @in_example = true
           @outputs << "<<< ruby"
           next
-        elsif m[1]=="end_src" or m[1]=="end_example"
+        elsif m[1].include?(["end_src","end_example"])
           @in_example = false
           @outputs << ">>>"
           next
