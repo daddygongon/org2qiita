@@ -2,41 +2,48 @@
 
 # convert org formated lines to hiki
 class ToHiki
-  # converter
-  def convert(lines)
+  def initialize()
     @in_example = false
     @outputs = []
+  end
 
+  # converter
+  def convert(lines)
     lines.split(/\n/).each do |line|
-      m = line.match(/^\#\+(.+)$/)
-      if m
-        @outputs << check_options(m, line)
-        next
-      end
-
-      if @in_example == true
-        @outputs << line
-        next
-      end
-
-      m = line.match(/^\[\[file:(.+)\]\]/) # attach should be on line
-      line = m ? convert_attach(m, line) : line
-
-      line = # should be one line
-        case line_match(line)
-        when 0; convert_head(line)
-        when 1; convert_desc(line)
-        when 2; convert_list(line)
-        else line
-        end
-
-
+      next if check_block?(line)
+      line = check_in line
+      line = check_one line
       @outputs << line
     end
     @outputs.join("\n")
   end
 
   private
+  def check_one(line)
+    case line_match(line)
+    when 0; convert_head(line)
+    when 1; convert_desc(line)
+    when 2; convert_list(line)
+    else line
+    end
+  end
+  def check_in(line)
+    m = line.match(/^\[\[file:(.+)\]\]/) # attach should be on line
+    return m ? convert_attach(m, line) : line
+  end
+  def check_block?(line)
+    m = line.match(/^\#\+(.+)$/)
+    if m
+      @outputs << check_options(m, line)
+      return true
+    end
+    if @in_example == true
+      @outputs << line
+      return true
+    end
+    return false
+  end
+
   def check_options(m, line)
     case m[1]
     when 'begin_example'
