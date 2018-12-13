@@ -19,10 +19,10 @@ class ToHiki
         next
       end
 
-            m = line.match(/^\[\[file:(.+)\]\]/)
+      m = line.match(/^\[\[file:(.+)\]\]/) # attach should be on line
       line = m ? convert_attach(m, line) : line
 
-      line =
+      line = # should be one line
         case line_match(line)
         when 0; convert_head(line)
         when 1; convert_desc(line)
