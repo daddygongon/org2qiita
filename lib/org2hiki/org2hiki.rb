@@ -80,6 +80,6 @@ class ToHiki
   end
 
   def convert_attach(m, line)
-    line.gsub!(m[0],"\{\{attach_view(#{m[1]})\}\}")
+    line.gsub!(m[0],"\{\{attach_view(#{File.basename(m[1])})\}\}")
   end
 end

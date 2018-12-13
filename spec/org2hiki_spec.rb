@@ -25,7 +25,7 @@ describe ToHiki do
   end
 
   it "convert attach view" do
-    assert('[[file:./e.gif]]', '{{attach_view(./e.gif)}}')
+    assert('[[file:./e.gif]]', '{{attach_view(e.gif)}}')
   end
 
   it "convert options to comments" do
