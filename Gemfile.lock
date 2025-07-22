@@ -22,13 +22,13 @@ GEM
     rspec-mocks (3.0.4)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.4)
-    thor (0.20.3)
+    thor (1.4.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.1.4)
+  bundler (~> 2.2.10)
   minitest (~> 5.0)
   org2hiki!
   rake (~> 13.0.1)
